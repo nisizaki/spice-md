@@ -1396,9 +1396,9 @@ P_A & \overset{def}{=} & (\text{前の場合と同じ}) \\
  & & \quad \mathtt{err}\{\mathtt{free}\ y_a, y_{sa}, y_h, q_2\}; \mathtt{free}\ q_2; \\
  & & \mathtt{match}\ y_b'\ \mathtt{is}\ B\ \mathtt{err}\{\mathtt{free}\ y_a, y_{sa}, y_h, y_a', y_b', y_{sa1}', y_{h1}'\}; \\
  & & \mathtt{free}\ y_b'; \\
- & & \mathtt{store}\ y_h = \mathit{hash}((y_a', y_b', \mathit{pred}(y_{sa1}'), secret, count)); \\
- & & \mathtt{match}\ y_{h1}'\ \mathtt{is}\ \mathit{succ}(y_h) \\
- & & \quad \mathtt{err}\{\mathtt{free}\ y_a, y_{sa}, y_h, y_a', y_{sa}', y_{sa1}', y_{h1}', y_h\}; \\
+ & & \mathtt{store}\ y_h' = \mathit{hash}((y_a', y_b', \mathit{pred}(y_{sa1}'), secret, count)); \\
+ & & \mathtt{match}\ y_{h1}'\ \mathtt{is}\ \mathit{succ}(y_h') \\
+ & & \quad \mathtt{err}\{\mathtt{free}\ y_a, y_{sa}, y_h, y_a', y_{sa}', y_{h1}', y_h'\}; \\
  & & \mathtt{free}\ y_h'; \tilde{P}_B'
 \end{array}
 $$
@@ -1440,7 +1440,7 @@ SYNcookieConfig & \\
  & P_A' \mid \mathtt{repeat}\ P_A \\
  & \mid \mathtt{split}\ [y_a', y_b', y_{sa1}', y_{h1}']\ \mathtt{is}\ q_2 \cdots \\
  & \mid \mathtt{repeat}\ \tilde{P}_B \\
- & : \{\mathbf{b} \cdot -3\mathit{store}\} + \{\mathbf{b} \cdot \mathit{store}\}\} \\
+ & : \{\mathbf{b} \cdot -3\mathit{store}\} + \{\mathbf{b} \cdot \mathit{store}\} \\
  & = \{\mathbf{b} \cdot -2\mathit{store}\} \\
 \gg & \mathtt{new}(S_A); P_A' \mid \mathtt{repeat}\ P_A \mid \tilde{P}_B' \mid \mathtt{repeat}\ \tilde{P}_B \\
  & : \{\mathbf{b} \cdot 4\mathit{store}\} + \{\mathbf{b} \cdot -\mathit{store}\} \\
@@ -1536,8 +1536,11 @@ flowchart TD
     m3 -.->|"−7store / RedMatchErr·RedFree"| STOP
     m3 -->|"match / RedMatch"| m4((•))
     m4 -->|"−store / RedFree"| m5((•))
-    m5 -->|"+hash / RedStore·RedHash"| m6((•))
+    m5 -->|"store+hash / RedStore·RedHash"| m6((•))
     m6 -.->|"−7store / RedMatchErr·RedFree"| STOP
+    m6 -->|"match / RedMatch"| m7((•))
+    m7 -->|"−store / RedFree"| m8((•))
+    m8 -->|"new(S_B);P_B'"| DONE["new(S_B);P_B'"]
 ```
 
 **図 1　$\tilde{P}_B$ の遷移図**
